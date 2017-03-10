@@ -1,0 +1,117 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body, #map {
+width: 100%; height: 100%; z-index: 1; position: absolute; margin: 0;
+}
+
+ul {
+	list-style-type: none; 
+	padding-left: 0; 
+	margin-bottom: 0;
+}
+
+li {
+	font-family: Helvetica, sans-serif; 
+	/*padding: 20px 0 15px 15px;*/
+}
+
+li:hover {
+	background-color: #fff;
+	color: black;
+}
+
+a {
+	text-decoration: none;
+	color: #000;
+}
+
+hr {
+	/*margin: 10px 0 0 0;*/
+	background: #000;
+	color: blue;
+	border-color: blue;
+}
+
+#input {
+    width: 100%;
+    height: 40px;
+    font-size: 17px;
+    font-family: helvetica, sans-serif;
+    color: #9D9D9D;
+    border: none;
+    -webkit-box-shadow: 1px 1px 1px #9D9D9D;
+    outline: none;
+}
+#weatherContainer {
+    display: block;
+    position: absolute;
+    z-index: 4;
+    background-color: #fff;
+    width: 260px;
+    height: 95px;
+    padding-top: 5px;
+    right: 0;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+#weatherContainer .temp {
+	float: left;
+	font-size: 1.75em;
+	width: 130px;
+	padding-top: 10px;
+	text-align: center;
+}
+
+#weatherContainer .city {
+	float: left;
+	font-size: 1em;
+	width: 130px;
+	padding-top: 10px;
+	text-align: center;
+}
+
+#weatherIcon {
+	float: left;
+}
+
+
+#searchContainer {
+	width: 300px;
+	height: 100%;
+    position: absolute;
+    z-index: 3; 
+}
+
+#searchNavigation {
+    width: 300px;
+    height: 100%;	
+    overflow: hidden;
+}
+
+#scrollingList {
+	height: 100%;
+	overflow: scroll;
+	background-color: #fff;
+	opacity: 0.9;
+}
+
+#menuContainer {
+	position: absolute;
+	z-index: 4;
+	top: 10px;
+	left: 310px;
+    opacity: 0.9;
+    max-width: 48px;
+    border-radius: 50%;
+}
+
+#menuButton {
+	height: 32px;
+	width: 32px;
+}
+
+
+

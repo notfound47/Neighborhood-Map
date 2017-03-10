@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Neighborhood Map - Crime Reports</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+	<div id="map"></div>
+	<div id="searchContainer">
+		<div id="searchNavigation">
+			<input id="input" placeholder="Search a Crime..." type="input" data-bind="textInput: query, valueUpdate: 'keydown'" autocomplete="on"></input>
+			<div id="scrollingList">
+				<ul data-bind="template: {name:'marker', foreach:markers}">
+				</ul>
+				<script type="text/html" id="marker">
+					<div data-bind="visible: visible">
+						<a href="#" data-bind="attr: {id: ActivityNumber}">
+                            <li>
+                                <strong data-bind="text: PrimaryViolation"></strong>
+                                <p data-bind="text: OccurenceLocation"></p>
+                                <p data-bind="text: OccurenceCity"></p> 
+                            </li>
+                        </a>
+                        <hr/>
+					</div>
+				</script>
+			</div>
+		</div>
+		<div id="menuContainer">
+			<img id="menuButton" src="img/menuicon.png" alt="Toggle Menu">
+		</div>
+	</div>
+	<div id="weatherContainer"><img id="weatherIcon" src="http://icons.wxug.com/graphics/wu2/logo_130x80.png"><span class="temp"></span><br /><span class="city"></span></div>
+	<script type="text/javascript" src="js/lib/knockout-3.4.2.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqaT_sOie4xGV-4dfpTtFwnQjeyKz8c4U&callback=initMap" async defer></script>
+	<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>
