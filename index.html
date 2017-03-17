@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Neighborhood Map - Crime Reports</title>
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" href="css/style.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -31,10 +31,10 @@
 			<img id="menuButton" src="img/menuicon.png" alt="Toggle Menu">
 		</div>
 	</div>
-	<div id="weatherContainer"><img id="weatherIcon" src="http://icons.wxug.com/graphics/wu2/logo_130x80.png"><span data-bind="html: temperature " class="temp"></span><br /><span data-bind="text: city" class="city"></span></div>
+	<div id="weatherContainer"><img id="weatherIcon" src="http://icons.wxug.com/graphics/wu2/logo_130x80.png"><span data-bind="html: temperature " class="temp"></span><br><span data-bind="text: city" class="city"></span></div>
 	<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="js/lib/knockout-3.4.2.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>
+	<script src="js/lib/knockout-3.4.2.js"></script>
+	<script src="js/script.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqaT_sOie4xGV-4dfpTtFwnQjeyKz8c4U&callback=initMap" onerror="mapErrorHandling()" async defer></script>
 </body>
 </html>

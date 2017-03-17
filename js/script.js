@@ -2,6 +2,7 @@ var map;
 var markers = [];
 var bouncingMarker = null;
 var viewModel = {};
+var error = false;
 
 // When page loads, get the weather information from Wunderground API
 // Place the temperature and city into <span> class using jQuery
@@ -11,11 +12,16 @@ $(document).ready(function($) {
 		dataType : 'jsonp',
 		success : function(parsed_json) {
 			var details = parsed_json.current_observation;
-			viewModel.temperature(details.temp_f + '&deg;');
-			viewModel.city(details.display_location.full);
+			if (typeof details === 'undefined') {
+				viewModel.temperature('Error!');
+				viewModel.city('Unable to load data');
+			} else {
+				viewModel.temperature(details.temp_f + '&deg;');
+				viewModel.city(details.display_location.full);
+			}
 		},
 		error: function(request, status, error) {
-        	alert(request.responseText);
+			alert('Weather information was not accessible: ' + request.statusText + ' ' + request.status);
 		}
 	}); 
 });
@@ -30,17 +36,17 @@ function initMap() {
 
 // Map error handling if the map doesn't load properly
 function mapErrorHandling(e) {
-	alert("Google Maps did not load properly, please try again later.");
+	alert('Google Maps did not load properly, please try again later.');
 }
 
 // Pull from Json file or API call with Json return and place into markers variable
 // using knockoutJS observable for displaying in the template
 
 function getMapMarkers() {
-	// http://saccounty.cloudapi.junar.com/api/v2/datastreams/SACRA-COUNT-CRIME-DATA/data.ajson/?auth_key=YOUR_API_KEY&limit=50&
 	// http://saccounty.cloudapi.junar.com/api/v2/datastreams/SACRA-COUNT-CRIME-DATA/data.pjson/?auth_key=d9abb5c2955c831a20afb305625d4a9a31307dfb&limit=50&filter0=column8[==]95624&filter1=column0[%3E]2016-0015395&where=(filter0%20and%20filter1)
 	var promise = $.getJSON('json/crimes.json', function(json) {
 		$.each(json, function(key, val) {
+			val['imagePath'] = "img/inf.png";
 			getFlickrImage(json[key].lat, json[key].lng, function(data) {
 				val['imagePath'] = data;
 			});
@@ -52,7 +58,7 @@ function getMapMarkers() {
 		
 	});
 
-	promise.done(function(data) {
+	promise.then(function(data) {
 		viewModel = {
 			query: ko.observable(''),
 			temperature: ko.observable(),
@@ -75,11 +81,13 @@ function getMapMarkers() {
 		}, viewModel);
 
 		ko.applyBindings(viewModel);	
-		placeMarkers(markers);
-		// filterMap();
 	});
-	promise.catch(function() {
-		alert("Crime data failed to load.");
+	promise.done(function() {
+		placeMarkers(markers);
+	});
+		// filterMap();
+	promise.catch(function(e) {
+		alert('Crime data failed to load: ' + e.statusText + ' ' + e.status);
 	});
 }
 
@@ -190,6 +198,8 @@ function showMenu() {
 }
 
 //GET JSON from Flickr
+//	var flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=d1f077a0e1a0a789cc563b38bc061500&text=landscape&accuracy=16&lat=' + lat + '&lon=' + lng + '&radius=2&format=json';
+//GET JSON from Flickr
 function getFlickrImage(lat, lng, handleData) {
 	var flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=d1f077a0e1a0a789cc563b38bc061500&text=landscape&accuracy=16&lat=' + lat + '&lon=' + lng + '&radius=2&format=json';
 	$.ajax({
@@ -197,14 +207,27 @@ function getFlickrImage(lat, lng, handleData) {
 	    dataType: 'jsonp',
 	    jsonp: 'jsoncallback',
 	    success: function(data) {
-	        var response = data.photos.photo;
-	        var photoUrl = 'https://farm' + response[0].farm + '.staticflickr.com/' + response[0].server + '/' + response[0].id + '_' + response[0].secret + '.jpg';
-	        
-	        handleData(photoUrl);
+	    	if (data.stat != 'fail') {
+		        var response = data.photos.photo;
+		        var photoUrl = 'https://farm' + response[0].farm + '.staticflickr.com/' + response[0].server + '/' + response[0].id + '_' + response[0].secret + '.jpg';
+		        handleData(photoUrl);
+		    } else {
+		    	handleData('img/inf.png');
+		    	if (error == false) {
+		    		alert('Unable to load image data from Flickr: ' + data.message);
+		    		error = true;
+		    	}
+				
+		    }
 	    },
-	    error: function() {
+	    error: function(e) {
 	    	//Display message if error getting flickr JSON
-			alert("Unable to load image data from Flickr");
+	    	handleData('img/inf.png');
+		    	if (error == false) {
+		    		console.log(e);
+		    		alert('Unable to load image data from Flickr: ' + e.statusText + ' ' + e.status);
+		    		error = true;
+		    	}
 
 		}
 	});
